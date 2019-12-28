@@ -7,3 +7,4 @@ Maintainers:
    * Alena Kushniarevich
    * Siarhei Hurkou
    * Alena Volchkova
+   * Ivan Andreyeu
