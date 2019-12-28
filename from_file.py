@@ -1,10 +1,7 @@
 from calc import Calculator, UnknownOperation, UnknownError
-	
 
 INPUT_FILENAME = "input.txt"
 OUTPUT_FILENAME = "output.txt"
-
-
 
 
 def get_data():
@@ -14,15 +11,11 @@ def get_data():
     return data
 
 
-
-
 def write_data(output_data):
     output_data = [str(x)+"\n" for x in output_data]
     print(output_data)
     with open(OUTPUT_FILENAME, "w") as out_file:
         out_file.writelines(output_data)
-
-
 
 
 if __name__ == "__main__":
@@ -41,7 +34,5 @@ if __name__ == "__main__":
         except UnknownError:
             results.append('UnknownError!')
 
-
     write_data(results)
     print(results)
-

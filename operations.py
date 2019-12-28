@@ -9,16 +9,12 @@ BR2 = ")"
 END = "."
 
 
-
-
 class Operation(object):
     __priority = 0
     __identificator = None
 
-
     def calculate(self, *args, **kwargs):
         raise NotImplementedError
-
 
     @classmethod
     def get_operations(cls):
@@ -33,29 +29,22 @@ class Operation(object):
             BR2: BracketOperation,
         }
 
-
     @classmethod
     def priority(cls):
         return cls.__priority
-
-
 
 
 class SumOperation(Operation):
     __priority = 3
     __identificator = [SUM]
 
-
     def calculate(self, *args, **kwargs):
         return sum(args)
-
-
 
 
 class DecOperation(Operation):
     __priority = 3
     __identificator = [DEC]
-
 
     def calculate(self, *args, **kwargs):
         result = args[0]
@@ -64,12 +53,9 @@ class DecOperation(Operation):
         return result
 
 
-
-
 class MultiplicationOperation(Operation):
     __priority = 2
     __identificator = [MUL]
-
 
     def calculate(self, *args, **kwargs):
         result = args[0]
@@ -78,12 +64,9 @@ class MultiplicationOperation(Operation):
         return result
 
 
-
-
 class DivisionOperation(Operation):
     __priority = 2
     __identificator = [DIV]
-
 
     def calculate(self, *args, **kwargs):
         result = args[0]
@@ -92,44 +75,32 @@ class DivisionOperation(Operation):
         return result
 
 
-
-
 class ExponentialOperation(Operation):
     __priority = 1
     __identificator = [EXP]
 
-
     def calculate(self, a, n):
         return a ** n
-
-
 
 
 class RootOfOperation(Operation):
     __priority = 1
     __identificator = [ROT]
 
-
     def calculate(self, a, n):
         return a ** (1 / n)
-
-
 
 
 class BracketOperation(Operation):
     __priority = 1
     __identificator = [BR1, BR2]
 
-
     def calculate(self, *args, **kwargs):
         return
 
 
-
-
 if __name__ == "__main__":
     import traceback
-
 
     TEST_CASES = [
         {"cls": SumOperation, "args": [1, 2, 3], "expected_result": 6},
@@ -141,7 +112,6 @@ if __name__ == "__main__":
         {"cls": RootOfOperation, "args": [16, 2], "expected_result": 4},
         {"cls": BracketOperation, "args": [16, 2], "expected_result": None},
     ]
-
 
     green = 0
     red = 0
@@ -158,4 +128,3 @@ if __name__ == "__main__":
             print(traceback.format_exc())
     all = green + red
     print(f"Run {all} tests, {green} passed, {red} failed")
-
