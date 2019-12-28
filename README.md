@@ -2,4 +2,4 @@
 
 # calculator
 Maintainers:
-   *Irina
+   * Irina Sk
