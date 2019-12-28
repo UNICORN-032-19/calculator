@@ -3,4 +3,5 @@
 # calculator
 
 Maintainers:
+   * Vladislav Shepilov
    * Alena Kushniarevich
