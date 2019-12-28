@@ -2,4 +2,11 @@
 
 # calculator
 
-    * Arseni
+Maintainers:
+   * Vladislav Shepilov
+   * Alena Kushniarevich
+   * Siarhei Hurkou
+   * Alena Volchkova
+   * Ivan Andreyeu
+   * Irina Sk
+   * Arseni
