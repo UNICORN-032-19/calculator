@@ -8,3 +8,4 @@ Maintainers:
    * Siarhei Hurkou
    * Alena Volchkova
    * Ivan Andreyeu
+   * Irina Sk
