@@ -1,5 +1,5 @@
 import re
-from operations import Operation
+from operations import Operation, BR1, BR2
 
 
 class UnknownOperation(NotImplementedError):
@@ -7,16 +7,23 @@ class UnknownOperation(NotImplementedError):
 
 
 class UnknownError(Exception):
-    pass
+    def __str__(self):
+
+        return f"UnknownError{self.args}"
 
 
 class Calculator(object):
 
     REGEXP_ALL = r"((\d{1,20}(\.|\,)\d{1,20})|(\d{1,20})|(\+|\-|\*|\^|\#|\/|\(|\)|\.))"
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, start_auto=True, *args, **kwargs):
         self.OPERATIONS = Operation.get_operations()
-        self.start()
+        if start_auto:
+            self.start()
+
+    def prepare_data(self, input_str):
+        matches = re.finditer(self.REGEXP_ALL, input_str, re.MULTILINE)
+        return [match.group() for match in matches]
 
     def get_data(self):
         """
@@ -24,14 +31,13 @@ class Calculator(object):
         return: list of elements
         """
         input_str = input("Введите операцию: ")
-        matches = re.finditer(self.REGEXP_ALL, input_str, re.MULTILINE)
-        return [match.group() for match in matches]
+        return self.prepare_data(input_str)
 
     def check_data(self, elements):  # проверяет исключения, все, чтобы не было ошибок
-        if (
-            elements[0] in self.OPERATIONS or elements[-1] in self.OPERATIONS
-        ):  # проверяем
-            raise UnknownError
+        if elements[0] in self.OPERATIONS.keys() - [BR1, BR2]:  # проверяем
+            raise UnknownError("Вычисление не может начинаться с операции")
+        if elements[-1] in self.OPERATIONS.keys() - [BR1, BR2]:
+            raise UnknownError("Вычисление не может оканчиваться операцией")
 
         for element in elements:
             if isinstance(element, str) and element not in self.OPERATIONS:
@@ -55,10 +61,7 @@ class Calculator(object):
         result = []
         for index, element in enumerate(elements):
             if not isinstance(element, (int, float)):
-                result += [(index, self.OPERATIONS.get(element).priority)]
-        import pdb
-
-        pdb.set_trace()
+                result += [(index, self.OPERATIONS.get(element).priority())]
         return sorted(result, key=lambda k: k[1])
 
     def calc(self, elements):
