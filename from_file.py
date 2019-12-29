@@ -1,10 +1,7 @@
 from calc import Calculator, UnknownOperation, UnknownError
-	
 
 INPUT_FILENAME = "input.txt"
 OUTPUT_FILENAME = "output.txt"
-
-
 
 
 def get_data():
@@ -14,34 +11,28 @@ def get_data():
     return data
 
 
-
-
 def write_data(output_data):
-    output_data = [str(x)+"\n" for x in output_data]
+    output_data = [str(x) + "\n" for x in output_data]
     print(output_data)
     with open(OUTPUT_FILENAME, "w") as out_file:
         out_file.writelines(output_data)
 
 
-
-
 if __name__ == "__main__":
-    calc = Calculator(start_auto=False)
-    data = get_data()
-    results = []
-    for line in data:
-        elements = calc.prepare_data(line)
+    CALC = Calculator(start_auto=False)
+    DATA = get_data()
+    RESULTS = []
+    for line in DATA:
+        elements = CALC.prepare_data(line)
         try:
-            result = calc.calc(elements)
-            results.append(result)
+            result = CALC.calc(elements)
+            RESULTS.append(result)
         except ZeroDivisionError:
-            results.append("На ноль делить нельзя!")
+            RESULTS.append("На ноль делить нельзя!")
         except UnknownOperation as err:
-            results.append('UnknownOperation')  # определяем какая неизвестная операция
+            RESULTS.append("UnknownOperation")  # определяем какая неизвестная операция
         except UnknownError:
-            results.append('UnknownError!')
+            RESULTS.append("UnknownError!")
 
-
-    write_data(results)
-    print(results)
-
+    write_data(RESULTS)
+    print(RESULTS)

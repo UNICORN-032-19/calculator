@@ -1,5 +1,5 @@
 import re
-from operations import Operation
+from operations import Operation, BR1, BR2
 
 
 class UnknownOperation(NotImplementedError):
@@ -7,16 +7,23 @@ class UnknownOperation(NotImplementedError):
 
 
 class UnknownError(Exception):
-    pass
+    def __str__(self):
+
+        return f"UnknownError{self.args}"
 
 
-class Calculator(object):
+class Calculator():
 
     REGEXP_ALL = r"((\d{1,20}(\.|\,)\d{1,20})|(\d{1,20})|(\+|\-|\*|\^|\#|\/|\(|\)|\.))"
 
-    def __init__(self, *args, **kwargs):
-        self.OPERATIONS = Operation.get_operations()
-        self.start()
+    def __init__(self, start_auto=True):
+        self.operations = Operation.get_operations()
+        if start_auto:
+            self.start()
+
+    def prepare_data(self, input_str):
+        matches = re.finditer(self.REGEXP_ALL, input_str, re.MULTILINE)
+        return [match.group() for match in matches]
 
     def get_data(self):
         """
@@ -24,23 +31,22 @@ class Calculator(object):
         return: list of elements
         """
         input_str = input("Введите операцию: ")
-        matches = re.finditer(self.REGEXP_ALL, input_str, re.MULTILINE)
-        return [match.group() for match in matches]
+        return self.prepare_data(input_str)
 
     def check_data(self, elements):  # проверяет исключения, все, чтобы не было ошибок
-        if (
-            elements[0] in self.OPERATIONS or elements[-1] in self.OPERATIONS
-        ):  # проверяем
-            raise UnknownError
+        if elements[0] in self.operations.keys() - [BR1, BR2]:  # проверяем
+            raise UnknownError("Вычисление не может начинаться с операции")
+        if elements[-1] in self.operations.keys() - [BR1, BR2]:
+            raise UnknownError("Вычисление не может оканчиваться операцией")
 
         for element in elements:
-            if isinstance(element, str) and element not in self.OPERATIONS:
+            if isinstance(element, str) and element not in self.operations:
                 raise UnknownOperation(element)
 
     def compress(self, elements, index):
         first = elements[index - 1]
         second = elements[index + 1]
-        cls = self.OPERATIONS.get(elements[index], None)
+        cls = self.operations.get(elements[index], None)
         operation = cls()
 
         left_finish = 0 if index == 1 else index - 1
@@ -55,10 +61,7 @@ class Calculator(object):
         result = []
         for index, element in enumerate(elements):
             if not isinstance(element, (int, float)):
-                result += [(index, self.OPERATIONS.get(element).priority)]
-        import pdb
-
-        pdb.set_trace()
+                result += [(index, self.operations.get(element).priority())]
         return sorted(result, key=lambda k: k[1])
 
     def calc(self, elements):
@@ -106,3 +109,6 @@ class Calculator(object):
                 print("UnknownOperation", err)  # определяем какая неизвестная операция
             except UnknownError:
                 print("UnknownError!")
+
+    def prepare_data(self, string):
+        pass

@@ -9,16 +9,12 @@ BR2 = ")"
 END = "."
 
 
-
-
-class Operation(object):
+class Operation():
     __priority = 0
     __identificator = None
 
-
     def calculate(self, *args, **kwargs):
         raise NotImplementedError
-
 
     @classmethod
     def get_operations(cls):
@@ -33,29 +29,22 @@ class Operation(object):
             BR2: BracketOperation,
         }
 
-
     @classmethod
     def priority(cls):
         return cls.__priority
-
-
 
 
 class SumOperation(Operation):
     __priority = 3
     __identificator = [SUM]
 
-
     def calculate(self, *args, **kwargs):
         return sum(args)
-
-
 
 
 class DecOperation(Operation):
     __priority = 3
     __identificator = [DEC]
-
 
     def calculate(self, *args, **kwargs):
         result = args[0]
@@ -64,12 +53,9 @@ class DecOperation(Operation):
         return result
 
 
-
-
 class MultiplicationOperation(Operation):
     __priority = 2
     __identificator = [MUL]
-
 
     def calculate(self, *args, **kwargs):
         result = args[0]
@@ -78,12 +64,9 @@ class MultiplicationOperation(Operation):
         return result
 
 
-
-
 class DivisionOperation(Operation):
     __priority = 2
     __identificator = [DIV]
-
 
     def calculate(self, *args, **kwargs):
         result = args[0]
@@ -92,70 +75,64 @@ class DivisionOperation(Operation):
         return result
 
 
-
-
 class ExponentialOperation(Operation):
     __priority = 1
     __identificator = [EXP]
 
-
-    def calculate(self, a, n):
-        return a ** n
-
-
+    def calculate(self, *args, **kwargs):
+        arg1 = args[0]
+        arg2 = args[1]
+        return arg1 ** arg2
 
 
 class RootOfOperation(Operation):
     __priority = 1
     __identificator = [ROT]
 
+    def calculate(self, *args, **kwargs):
+        arg1 = args[0]
+        arg2 = args[1]
 
-    def calculate(self, a, n):
-        return a ** (1 / n)
-
-
+        return arg1 ** (1 / arg2)
 
 
 class BracketOperation(Operation):
     __priority = 1
     __identificator = [BR1, BR2]
 
-
     def calculate(self, *args, **kwargs):
         return
-
-
 
 
 if __name__ == "__main__":
     import traceback
 
-
     TEST_CASES = [
-        {"cls": SumOperation, "args": [1, 2, 3], "expected_result": 6},
-        {"cls": SumOperation, "args": [2, 3], "expected_result": 5},
-        {"cls": DecOperation, "args": [1, 2, 3], "expected_result": -4},
-        {"cls": MultiplicationOperation, "args": [8, 8, 2, 2], "expected_result": 256},
-        {"cls": DivisionOperation, "args": [16, 4, 2, 1], "expected_result": 2},
-        {"cls": ExponentialOperation, "args": [8, 2], "expected_result": 64},
-        {"cls": RootOfOperation, "args": [16, 2], "expected_result": 4},
-        {"cls": BracketOperation, "args": [16, 2], "expected_result": None},
+        {"cls_tc": SumOperation, "args": [1, 2, 3], "expected_result": 6},
+        {"cls_tc": SumOperation, "args": [2, 3], "expected_result": 5},
+        {"cls_tc": DecOperation, "args": [1, 2, 3], "expected_result": -4},
+        {"cls_tc": MultiplicationOperation, "args": [8, 8, 2, 2], "expected_result": 256},
+        {"cls_tc": DivisionOperation, "args": [16, 4, 2, 1], "expected_result": 2},
+        {"cls_tc": ExponentialOperation, "args": [8, 2], "expected_result": 64},
+        {"cls_tc": RootOfOperation, "args": [16, 2], "expected_result": 4},
+        {"cls_tc": BracketOperation, "args": [16, 2], "expected_result": None},
     ]
 
-
-    green = 0
-    red = 0
+    GREEN = 0
+    RED = 0
     for test_case in TEST_CASES:
-        cls = test_case["cls"]
-        op = cls()
+        cls_tc = test_case["cls_tc"]
+        op = cls_tc()
         expected_result = test_case["expected_result"]
-        result = op.calculate(*test_case["args"])
+        result_tc = op.calculate(*test_case["args"])
         try:
-            assert result == expected_result, f"calculate returns: {result}, expected: {expected_result}, operation is {cls.__name__}"
-            green += 1
+            assert (
+                result_tc == expected_result
+            ), f"calculate returns: {result_tc}, expected: {expected_result}, \
+            operation is {cls_tc.__name__}"
+            GREEN += 1
         except AssertionError:
-            red += 1
+            RED += 1
             print(traceback.format_exc())
-    all = green + red
-    print(f"Run {all} tests, {green} passed, {red} failed")
-
+    all_messages = GREEN + RED
+    print(f"Run {all_messages} tests, {GREEN} passed, {RED} failed")
