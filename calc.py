@@ -109,6 +109,3 @@ class Calculator():
                 print("UnknownOperation", err)  # определяем какая неизвестная операция
             except UnknownError:
                 print("UnknownError!")
-
-    def prepare_data(self, string):
-        pass

@@ -2,7 +2,7 @@ from tkinter import Tk, Frame, Label, Button
 from calc import Calculator, UnknownOperation, UnknownError
 
 
-class Main(Frame):
+class Main(Frame):  # pylint: disable=too-many-ancestors
     formula = "0"
 
     def __init__(self, root):

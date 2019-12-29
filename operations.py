@@ -134,5 +134,5 @@ if __name__ == "__main__":
         except AssertionError:
             RED += 1
             print(traceback.format_exc())
-    all_messages = GREEN + RED
-    print(f"Run {all_messages} tests, {GREEN} passed, {RED} failed")
+    ALL_MESSAGES = GREEN + RED
+    print(f"Run {ALL_MESSAGES} tests, {GREEN} passed, {RED} failed")
