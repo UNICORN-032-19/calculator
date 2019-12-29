@@ -12,35 +12,46 @@ class Main(Frame):
     def build(self):
         self.calc = Calculator(start_auto=False)
         self.lbl_err = Label(
-            text="",
-            font=("Times New Roman", 21, "bold"),
-            bg="#000", foreground="#FF0"
+            text="", font=("Times New Roman", 21, "bold"), bg="#000", foreground="#FF0"
         )
         self.lbl_err.place(x=11, y=5)
         self.lbl = Label(
             text=self.formula,
             font=("Times New Roman", 21, "bold"),
-            bg="#000", foreground="#FFF"
+            bg="#000",
+            foreground="#FFF",
         )
         self.lbl.place(x=11, y=50)
 
         btns = [
-            "C", "DEL", "*", "=",
-            "1", "2", "3", "/",
-            "4", "5", "6", "+",
-            "7", "8", "9", "-",
-            "(", "0", ")", "X^2",
+            "C",
+            "DEL",
+            "*",
+            "=",
+            "1",
+            "2",
+            "3",
+            "/",
+            "4",
+            "5",
+            "6",
+            "+",
+            "7",
+            "8",
+            "9",
+            "-",
+            "(",
+            "0",
+            ")",
+            "X^2",
         ]
         x = 10
         y = 100
         for btn in btns:
             command = lambda x=btn: self.command(x)
             Button(
-                text=btn, bg="#FFF",
-                font=("Times New Roman", 15), command=command
-            ).place(
-                x=x, y=y, width=115, height=79
-            )
+                text=btn, bg="#FFF", font=("Times New Roman", 15), command=command
+            ).place(x=x, y=y, width=115, height=79)
             x += 117
             if x > 400:
                 x = 10
@@ -55,9 +66,9 @@ class Main(Frame):
         except ZeroDivisionError:
             error = "На ноль делить нельзя!"
         except UnknownOperation as err:
-            error = 'UnknownOperation'
+            error = "UnknownOperation"
         except UnknownError:
-            error = 'UnknownError!'
+            error = "UnknownError!"
         return str(result), str(error)
 
     def command(self, symbol):
@@ -74,7 +85,6 @@ class Main(Frame):
             else:
                 self.formula = result
 
-
         elif symbol == "X^2":
             error = ""
             try:
@@ -86,7 +96,7 @@ class Main(Frame):
                 if error:
                     raise ValueError(error)
 
-                result, error = self.get_result(result1 + '^2')
+                result, error = self.get_result(result1 + "^2")
                 if error:
                     raise ValueError(error)
                 self.formula = result

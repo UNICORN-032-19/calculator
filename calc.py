@@ -1,12 +1,12 @@
 import re
 from operations import Operation, BR1, BR2
 
+
 class UnknownOperation(NotImplementedError):
     pass
 
 
 class UnknownError(Exception):
-
     def __str__(self):
 
         return f"UnknownError{self.args}"
@@ -44,26 +44,30 @@ class Calculator(object):
                 raise UnknownOperation(element)
 
     def compress(self, elements, index):
-        first = elements[index-1]
-        second = elements[index+1]
+        first = elements[index - 1]
+        second = elements[index + 1]
         cls = self.OPERATIONS.get(elements[index], None)
         operation = cls()
-  
+
         left_finish = 0 if index == 1 else index - 1
         right_first = len(elements) if index == len(elements) - 2 else index + 2
-        return elements[:left_finish] + [operation.calculate(first, second)] + elements[right_first:]
+        return (
+            elements[:left_finish]
+            + [operation.calculate(first, second)]
+            + elements[right_first:]
+        )
 
     def get_priority(self, elements):
         result = []
         for index, element in enumerate(elements):
             if not isinstance(element, (int, float)):
                 result += [(index, self.OPERATIONS.get(element).priority())]
-        return sorted(result, key=lambda k: k[1]) 
+        return sorted(result, key=lambda k: k[1])
 
     def calc(self, elements):
         for index, element in enumerate(elements):
             try:
-                element = float(element.replace(',', '.'))
+                element = float(element.replace(",", "."))
             except ValueError:
                 pass
             elements[index] = element
@@ -73,13 +77,13 @@ class Calculator(object):
         while elements.count(")") > 0:
             end = elements.index(")")
             start = (end - 1) - list(reversed(elements[:end])).index("(")
-            cutted = elements[start + 1:end]
+            cutted = elements[start + 1 : end]
             while len(cutted) > 1:
                 priority = self.get_priority(cutted)
                 cutted = self.compress(cutted, priority[0][0])
-            elements[start:end + 1] = cutted
+            elements[start : end + 1] = cutted
             print(elements)
-        
+
         while len(elements) > 1:
             priority = self.get_priority(elements)
             print(priority)
@@ -102,6 +106,6 @@ class Calculator(object):
             except ZeroDivisionError:
                 print("На ноль делить нельзя!")
             except UnknownOperation as err:
-                print('UnknownOperation', err)  # определяем какая неизвестная операция
+                print("UnknownOperation", err)  # определяем какая неизвестная операция
             except UnknownError:
-                print('UnknownError!')
+                print("UnknownError!")

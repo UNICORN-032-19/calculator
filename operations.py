@@ -121,7 +121,9 @@ if __name__ == "__main__":
         expected_result = test_case["expected_result"]
         result = op.calculate(*test_case["args"])
         try:
-            assert result == expected_result, f"calculate returns: {result}, expected: {expected_result}, operation is {cls.__name__}"
+            assert (
+                result == expected_result
+            ), f"calculate returns: {result}, expected: {expected_result}, operation is {cls.__name__}"
             green += 1
         except AssertionError:
             red += 1
