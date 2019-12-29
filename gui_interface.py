@@ -45,17 +45,17 @@ class Main(Frame):
             ")",
             "X^2",
         ]
-        x = 10
-        y = 100
+        length = 10
+        height = 100
         for btn in btns:
             command = lambda x=btn: self.command(x)
             Button(
                 text=btn, bg="#FFF", font=("Times New Roman", 15), command=command
-            ).place(x=x, y=y, width=115, height=79)
-            x += 117
-            if x > 400:
-                x = 10
-                y += 81
+            ).place(x=length, y=height, width=115, height=79)
+            length += 117
+            if length > 400:
+                length = 10
+                height += 81
 
     def get_result(self, string):
         result = "0"
@@ -65,7 +65,7 @@ class Main(Frame):
             result = self.calc.calc(elements)
         except ZeroDivisionError:
             error = "На ноль делить нельзя!"
-        except UnknownOperation as err:
+        except UnknownOperation as error:
             error = "UnknownOperation"
         except UnknownError:
             error = "UnknownError!"
@@ -95,10 +95,9 @@ class Main(Frame):
             try:
                 if error:
                     raise ValueError(error)
-
                 result, error = self.get_result(result1 + "^2")
-                if error:
-                    raise ValueError(error)
+                #if error:
+                 #   raise ValueError(error)
                 self.formula = result
             except ValueError as error:
                 self.lbl_err.configure(text=str(error))
@@ -118,11 +117,11 @@ class Main(Frame):
 
 
 if __name__ == "__main__":
-    root = Tk()
-    root["bg"] = "#000"
-    root.title("Калькулятор")
-    root.geometry("485x550+200+200")
-    root.resizable(False, False)
-    app = Main(root)
-    app.pack()
-    root.mainloop()
+    ROOT = Tk()
+    ROOT["bg"] = "#000"
+    ROOT.title("Калькулятор")
+    ROOT.geometry("485x550+200+200")
+    ROOT.resizable(False, False)
+    APP = Main(ROOT)
+    APP.pack()
+    ROOT.mainloop()
