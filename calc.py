@@ -12,12 +12,12 @@ class UnknownError(Exception):
         return f"UnknownError{self.args}"
 
 
-class Calculator(object):
+class Calculator():
 
     REGEXP_ALL = r"((\d{1,20}(\.|\,)\d{1,20})|(\d{1,20})|(\+|\-|\*|\^|\#|\/|\(|\)|\.))"
 
-    def __init__(self, start_auto=True, *args, **kwargs):
-        self.OPERATIONS = Operation.get_operations()
+    def __init__(self, start_auto=True):
+        self.operations = Operation.get_operations()
         if start_auto:
             self.start()
 
@@ -34,19 +34,19 @@ class Calculator(object):
         return self.prepare_data(input_str)
 
     def check_data(self, elements):  # проверяет исключения, все, чтобы не было ошибок
-        if elements[0] in self.OPERATIONS.keys() - [BR1, BR2]:  # проверяем
+        if elements[0] in self.operations.keys() - [BR1, BR2]:  # проверяем
             raise UnknownError("Вычисление не может начинаться с операции")
-        if elements[-1] in self.OPERATIONS.keys() - [BR1, BR2]:
+        if elements[-1] in self.operations.keys() - [BR1, BR2]:
             raise UnknownError("Вычисление не может оканчиваться операцией")
 
         for element in elements:
-            if isinstance(element, str) and element not in self.OPERATIONS:
+            if isinstance(element, str) and element not in self.operations:
                 raise UnknownOperation(element)
 
     def compress(self, elements, index):
         first = elements[index - 1]
         second = elements[index + 1]
-        cls = self.OPERATIONS.get(elements[index], None)
+        cls = self.operations.get(elements[index], None)
         operation = cls()
 
         left_finish = 0 if index == 1 else index - 1
@@ -61,7 +61,7 @@ class Calculator(object):
         result = []
         for index, element in enumerate(elements):
             if not isinstance(element, (int, float)):
-                result += [(index, self.OPERATIONS.get(element).priority())]
+                result += [(index, self.operations.get(element).priority())]
         return sorted(result, key=lambda k: k[1])
 
     def calc(self, elements):
