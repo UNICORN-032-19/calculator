@@ -1,5 +1,5 @@
 import re
-from operations import Operation, BR1, BR2
+from .operations import Operation, BR1, BR2
 
 
 class UnknownOperation(NotImplementedError):
